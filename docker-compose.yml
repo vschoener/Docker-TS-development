@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  app:
+    container_name: dockertsdev_app
+    command: npm run start:dev
+    build: .
+    volumes:
+      - .:/app
+      # Don't forget this part, it's really important
+      - node_modules:/app/node_modules
+    ports:
+      - 8080:8080
+
+volumes:
+  # We create a volume for the node_modules folder
+  node_modules: {}

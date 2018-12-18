@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "build",
+    "lib": ["es2018", "dom"],
+    "target": "es2018",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    // Allow to import node module without `import *`
+    "esModuleInterop": true
+  },
+  "exclude":[
+    "node_modules",
+    "build"
+  ],
+}

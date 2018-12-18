@@ -1,0 +1,23 @@
+{
+  "name": "docker-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@types/node": "^10.12.17",
+    "express": "^4.16.4",
+    "typescript": "^3.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9",
+    "ts-node": "^7.0.1"
+  },
+  "scripts": {
+    "start": "node build/boot.js",
+    "start:dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/boot.ts",
+    "build:ts": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
