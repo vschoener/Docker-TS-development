@@ -1,36 +1,28 @@
-# --- Installing stage
-FROM node:11.4 AS installer
+#
+# Builder stage.
+# This state compile our TypeScript to get the JavaScript code
+#
+FROM node:12.13.0 AS builder
 
 WORKDIR /usr/src/app
-
-ARG NODE_ENV=production
-ARG NPM_TOKEN=
-ENV NODE_ENV=${NODE_ENV}
 
 COPY package*.json ./
-RUN npm install --quiet
+COPY tsconfig*.json ./
+COPY ./src ./src
+RUN npm ci --quiet && npm run build
 
-# ---
+#
+# Production stage.
+# This state compile get back the JavaScript code from builder stage
+# It will also install the production package only
+#
+FROM node:12.13.0-slim
 
-# Building stage
-FROM installer AS builder
-
-## Workdir is shared between the stage so let's reuse it as we neeed the packages
-WORKDIR /usr/src/app
-
-COPY ./src src
-COPY tsconfig.json .
-RUN npm run build
-
-# ---
-
-# Running code under slim image (production part mostly)
-FROM node:11.4-slim
-
-## Clean new directory
 WORKDIR /app
+ENV NODE_ENV=production
 
-## We just need the build and package to execute the command
-COPY --from=builder /usr/src/app/build build
+COPY package*.json ./
+RUN npm ci --quiet --only=production
 
-CMD [ "node", "build/boot.js" ]
+## We just need the build to execute the command
+COPY --from=builder /usr/src/app/build ./build
